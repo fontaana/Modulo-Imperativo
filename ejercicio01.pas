@@ -18,12 +18,12 @@ procedure leerventas (var dato:venta);
 begin
 writeln('Dia');
 read(dato.dia);
-if (dato.dia <> 0) then 
+if (dato.dia <> 0) then
 begin
-	dato.codigo:= random(16);
-	writeln(dato.codigo);
-	writeln('Cantidad');
-	read(dato.cantidad);
+dato.codigo:= random(16);
+writeln('El codigo es ',dato.codigo);
+writeln('Cantidad');
+read(dato.cantidad);
 end;
 end;
 
@@ -46,9 +46,9 @@ i:integer;
 begin 
 for i:= 1 to dimlog do
 begin
-writeln(vec[dimlog].dia);
-writeln(vec[dimlog].codigo);
-writeln(vec[dimlog].cantidad);
+writeln(vec[i].dia);
+writeln(vec[i].codigo);
+writeln(vec[i].cantidad);
 end;
 end;
 
@@ -62,7 +62,7 @@ begin
 	pos:=i;
 		for j:= i+1 to dimlog do 
 		begin
-			if vec[j].codigo > vec[pos].codigo then begin
+			if vec[j].codigo < vec[pos].codigo then begin
 				aux:=vec[i];
 				vec[i]:=vec[j];
 				vec[j]:=aux;
@@ -71,7 +71,7 @@ begin
 end;
 end;
 
-procedure elimar_rango (var vec:comercio; var dimlog:integer; a:cod; b:cod);
+procedure eliminar_rango (var vec:comercio; var dimlog:integer; a:cod; b:cod);
 var
 j,pos:integer;
 begin 
@@ -91,9 +91,37 @@ end;
 pos:=pos+1
 end;
 
+procedure ordenar_codigos_pares (vec:comercio;var new_vec:comercio ; dimlog:integer; var new_dimlog:integer);
 var
-vec:comercio;
-dimlog:integer;
+i,j,pos:integer;
+aux:venta;
+begin
+new_dimlog:=0;
+for i:= 1 to dimlog do 
+begin
+if vec[i].codigo mod 2 = 0 then
+begin
+new_dimlog:=new_dimlog+1;
+new_vec[new_dimlog]:= vec[i];
+end;
+end;
+
+for i:= 1 to new_dimlog-1 do
+begin
+	pos:=i;
+	
+		for j:= i+1 to new_dimlog do
+			if new_vec[j].codigo > new_vec[pos].codigo then
+				pos:=j;
+				
+		aux:=vec[pos];
+		vec[pos]:=vec[i];
+		vec[i]:=aux;
+		end;
+end;
+var
+new_vec,vec:comercio;
+new_dimlog,dimlog:integer;
 begin
 randomize;
 dimlog:=0;
@@ -101,4 +129,6 @@ almacenardatos(vec,dimlog);
 mostrarvec(vec,dimlog);
 ordenarvector(vec,dimlog);
 mostrarvec(vec,dimlog);
+ordenar_codigos_pares(vec,new_vec,dimlog,new_dimlog);
+mostrarvec(new_vec,new_dimlog);
 end.
