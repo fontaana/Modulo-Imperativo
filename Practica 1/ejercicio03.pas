@@ -21,7 +21,7 @@ del vector obtenido en el punto c).}
 
 program ejercicio03;
 type
-gen=1..8;
+gen=-1..8;
 pel=record
 genero:gen;
 codigo:integer;
@@ -36,12 +36,15 @@ ele:pel;
 end;
 procedure leer_datos (var pelicula:pel);
 begin
-writeln('Genero');
-read(pelicula.genero);
 writeln('Codigo');
 read(pelicula.codigo);
+if(pelicula.codigo <> -1) then
+begin
+writeln('Genero');
+read(pelicula.genero);
 writeln('Puntaje');
 read(pelicula.puntaje);
+end;
 end;
 procedure crear_nodo (var l:lista; dato:pel);
 var
@@ -49,6 +52,7 @@ nuevo:lista;
 begin
 new(nuevo);
 nuevo^.ele:=dato;
+nuevo^.sig:=nil;
 if l=nil then
 l:=nuevo
 else
@@ -75,7 +79,7 @@ var
 i:integer;
 begin
 for i:=1 to 8 do 
-	vec[i].puntaje:= -1;
+	vec[i].puntaje:= 0;
 while l <> nil do
 begin
 	if l^.ele.puntaje > vec[l^.ele.genero].puntaje then
@@ -83,12 +87,26 @@ begin
 	l:=l^.sig;
 end;
 end;
-ordenar_vec (var vec:max_gen);
+procedure ordenar_vec (var vec:max_gen);
 var
 i,j,pos:integer;
 aux:pel;
 begin
-for i:=1 to 8
+for i:=1 to 8-1 do
+begin
+pos:=i;
+for j:=i+1 to 8 do
+	if vec[j].puntaje < vec[pos].puntaje then
+		pos:=j;
+aux:=vec[pos];
+vec[pos]:=vec[i];
+vec[i]:=aux;
+end;
+end;
+procedure mostar_max_min(vec:max_gen);
+begin
+writeln('Pelicula con mas puntaje ',vec[8].codigo);
+writeln('Pelicula con menos puntaje ',vec[1].codigo);
 end;
 var
 l:lista;
@@ -97,4 +115,5 @@ begin
 almacenar_datos(l);
 max_pels(vec,l);
 ordenar_vec(vec);
+mostar_max_min(vec);
 end.
