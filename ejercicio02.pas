@@ -43,7 +43,7 @@ begin
 end;
 end;
 
-procedure ordenar_insercion (var vec:informacion; dimlog:integer);
+procedure ordenar_seleccion (var vec:informacion; dimlog:integer);
 var
 i,j,pos:integer;
 aux:oficina;
@@ -53,14 +53,27 @@ begin
 pos:=i;
 for j:= i+1 to dimlog do
 begin
-	if vec[j].codigo > vec[pos].codigo then
+	if vec[j].codigo < vec[pos].codigo then
 		pos:=j;
 end;
 aux:=vec[pos];
 vec[pos]:=vec[j];
 vec[j]:=aux;
 end;
-
+procedure ordenar_insercion (var vec:informacion; dimlog:integer);
+var
+i,j:integer;
+aux:oficina;
+begin
+for i:= 2 to dimlog do begin
+aux:=vec[i];
+j:= i-1;
+while (j > 0) and (v[j] > aux) do begin
+vec[j+1]:= v[j];
+j:=j-1;
+end;
+v[j+1]:= actual;
+end;
 end;
 var
 vec:informacion;
