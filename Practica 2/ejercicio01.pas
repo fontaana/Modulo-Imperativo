@@ -40,8 +40,8 @@ begin
 readln(caracter);
 	if ( caracter <> '.') and (dimlog < dimF)  then
 		begin
-		vec[dimlog]:=caracter;
 		dimlog:=dimlog+1;
+		vec[dimlog]:=caracter;
 		descomponer_palabra(vec,dimlog);
 		end
 		else
@@ -131,14 +131,14 @@ vec:letras;
 dimlog:integer;
 pri,l,pila:lista;
 begin
-dimlog:=1;
+dimlog:=0;
 l:=nil;
 pri:=nil;
 pila:=nil;
-//descomponer_palabra(vec,dimlog);
-//imprimir_vector (vec,dimlog);
-//imprimir_vector_recursivo (vec,dimlog);
-//writeln(contar_caracteres());
+descomponer_palabra(vec,dimlog);
+imprimir_vector (vec,dimlog);
+imprimir_vector_recursivo (vec,dimlog);
+writeln(contar_caracteres());
 lista_caracteres(l,pri);
 leer_lista(pri);
 leer_pila(pila,l)
