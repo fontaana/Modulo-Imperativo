@@ -27,21 +27,119 @@ dimf=10;
 type
 letras=array[1..dimf] of char;
 
-procedure descomponer_palabra(palabra:string;var vec:letras;var dimlog:integer);
+lista=^nodo;
+nodo=record 
+sig:lista;
+dato:char;
+end;
+
+procedure descomponer_palabra(var vec:letras;var dimlog:integer);
+var
+caracter:char;
 begin
-	if palabra[dimlog] <> '.'  then
-		vec[dimlog]:=palabra[dimlog];
+readln(caracter);
+	if ( caracter <> '.') and (dimlog < dimF)  then
+		begin
+		vec[dimlog]:=caracter;
 		dimlog:=dimlog+1;
-		descomponer_palabra(palabra,vec,dimlog);
+		descomponer_palabra(vec,dimlog);
+		end
+		else
+end;
+procedure imprimir_vector (vec:letras;dimlog:integer);
+var 
+i:integer;
+begin
+for i:=1 to dimlog do
+begin
+writeln(vec[i]);
+end;
+end;
+procedure imprimir_vector_recursivo (vec:letras;dimlog:integer);
+begin
+if dimlog > 0 then
+begin
+writeln(vec[dimlog]);
+dimlog:=dimlog-1;
+imprimir_vector_recursivo (vec,dimlog);
+end;
+end;
+function contar_caracteres ():integer;
+var
+caracter:char;
+begin
+readln(caracter);
+if caracter <> '.' then
+contar_caracteres:=contar_caracteres()+1
+else
+contar_caracteres:=0
+end;
+
+procedure lista_caracteres (var l:lista; var pri:lista);
+var
+caracter:char;
+nuevo:lista;
+begin
+readln(caracter);
+if caracter <> '.' then
+begin
+new(nuevo);
+nuevo^.sig:=nil;
+nuevo^.dato:=caracter;
+	if l=nil then
+	begin
+		l:=nuevo;
+		pri:=nuevo;
+	end
+	else begin
+		l^.sig:=nuevo;
+		l:=nuevo;	
+	end;
+lista_caracteres(l,pri);
+end;
+end;
+procedure leer_lista(pri:lista);
+begin
+if pri <> nil then
+writeln(pri^.dato);
+leer_lista(pri^.sig);
+end;
+procedure apilar (var p:lista; l:lista);
+var
+nuevo:lista;
+begin
+if l <> nil then begin
+new(nuevo);
+nuevo^.sig:=p;
+nuevo^.dato:=l^.dato;
+apilar (p,l^.sig);
+end;
+end;
+procedure desapilar (p:lista);
+begin
+if p <> nil then
+writeln(p^.dato);
+desapilar(p^.sig);
+end;
+procedure leer_pila (p:lista; l:lista);
+begin
+apilar(p,l);
+desapilar(p);
 end;
 var
-palabra:string;
 vec:letras;
-dimlog,i:integer;
+dimlog:integer;
+pri,l,pila:lista;
 begin
 dimlog:=1;
-read(palabra);
-descomponer_palabra(palabra,vec,dimlog);
-for i:=1 to dimlog do 
- writeln(vec[i]);
+l:=nil;
+pri:=nil;
+pila:=nil;
+//descomponer_palabra(vec,dimlog);
+//imprimir_vector (vec,dimlog);
+//imprimir_vector_recursivo (vec,dimlog);
+//writeln(contar_caracteres());
+lista_caracteres(l,pri);
+leer_lista(pri);
+leer_pila(pila,l)
 end.
