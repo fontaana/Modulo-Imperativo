@@ -56,11 +56,13 @@ readln(dato.nro);
 if dato.nro <> 0 then begin
 writeln('Ingrese Edad');
 readln(dato.edad);
+
 {
 writeln('Ingrese Nombre');
 readln(dato.nombre);
 }
 end;
+
 end;
 procedure agregar (var a:arbol; dato:socio);
 begin
@@ -125,10 +127,70 @@ if a <> nil then begin
 	max_edad(a^.hd,edad,nro);
 end;
 end;
-var
-a:arbol;
-max,min,nro,edad:integer;
+procedure aumentar_edad (var a:arbol);
+begin
+if a <> nil then begin 
+	a^.dato.edad:=a^.dato.edad+1;
+	aumentar_edad(a^.hi);	
+	aumentar_edad(a^.hd);
+end;
+end;
 
+procedure buscar_cod (a:arbol;var tf:boolean;valor:integer);
+begin 
+if (a <> nil) and (tf=false) then begin
+	if a^.dato.nro=valor then
+		tf:=true
+	else begin
+		if valor > a^.dato.nro then 
+			buscar_cod(a^.hd,tf,valor)
+		else
+			buscar_cod(a^.hi,tf,valor);
+	end;	
+end;
+end;
+procedure buscar_nombre (a:arbol;var tf:boolean;nombre:string);
+begin 
+if (a <> nil) and (tf=false) then begin
+	if a^.dato.nombre=nombre then
+		tf:=true;
+	buscar_nombre(a^.hd,tf,nombre);
+	buscar_nombre(a^.hi,tf,nombre);
+	end;	
+end;
+procedure contar_socios (a:arbol;var cant:integer);
+begin 
+if (a <> nil) then begin
+	cant:=cant+1;
+	contar_socios(a^.hd,cant);
+	contar_socios(a^.hi,cant);
+	end;	
+end;
+procedure sumar_edades (a:arbol;var suma:integer);
+begin
+if a <> nil then begin
+suma:=suma+a^.dato.edad;
+sumar_edades(a^.hi,suma);
+sumar_edades(a^.hd,suma);
+end;
+end;
+procedure promedio_edades (a:arbol;var promedio:real;cant:integer);
+var
+suma:integer;
+begin
+promedio:=0;
+suma:=0;
+contar_socios(a,cant);
+sumar_edades(a,suma);
+writeln('suma=', suma);
+promedio:=suma/cant;
+end;
+var
+nombre:string;
+a:arbol;
+max,min,nro,edad,valor,cant,suma:integer;
+tf:boolean;
+promedio:real;
 begin
 a:=nil;
 edad:=999;
@@ -137,12 +199,35 @@ cargar_arbol(a);
 encontrar_maximo(a,max);
 writeln('Numero de socio mas grande ',max);
 encontrar_min(a,min);
-writeln('Numero de mas chico ',min);
+writeln('Numero de socio mas chico ',min);
 min_edad(a,edad,nro);
 writeln('Numero de socio mas joven ', nro);
 edad:=-1;
-max_edad(a^.hd,edad,nro);
+max_edad(a,edad,nro);
 writeln('Numero de socio mas viejo ', nro);
+aumentar_edad(a);
+tf:=false;
+writeln('Ingrese valor a buscar');
+readln(valor);
+buscar_cod(a,tf,valor);
+if tf=true then
+	writeln('El valor se encontro')
+else
+	writeln('El valor no se encontro');
+writeln('Ingrese nombre a buscar');
+readln(nombre);
+tf:=false;
+buscar_nombre(a,tf,nombre);
+if tf=true then
+	writeln('El nombre se encontro')
+else
+	writeln('El nombre no se encontro');
 }
-
+cant:=0;
+{
+contar_socios(a,cant);
+writeln('Hay ',cant,' socios');
+}
+promedio_edades(a,promedio,cant);
+writeln(promedio);
 end.
